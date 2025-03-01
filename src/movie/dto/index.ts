@@ -1,2 +1,2 @@
-export { default as AwardInterval } from './awardInterval.dto';
-export { default as ProducerInterval } from './producerInterval.dto';
+export { default as AwardIntervalDto } from '@movie/dto/awardInterval.dto';
+export { default as ProducerIntervalDto } from '@movie/dto/producerInterval.dto';

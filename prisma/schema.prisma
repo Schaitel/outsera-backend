@@ -42,5 +42,7 @@ model Movie {
   year      Int
   studios   String
   producers String
-  winner    Boolean
+  winner    Boolean @default(false)
+
+  @@unique([title, year])
 }

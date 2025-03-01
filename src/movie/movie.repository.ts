@@ -1,10 +1,15 @@
-import { PrismaService } from '@db/prisma.service';
+import { Injectable } from '@nestjs/common';
+import PrismaService from '@db/prisma.service';
 import { MovieDto } from 'prisma/dto';
 
-export class MovieRepository {
+@Injectable()
+export default class MovieRepository {
 	constructor(private readonly prisma: PrismaService) {}
 
-	async getProducers(): Promise<MovieDto[]> {
-		return this.prisma.movie.findMany();
+	async getWinnersMovies(): Promise<MovieDto[]> {
+		return this.prisma.movie.findMany({
+			where: { winner: true },
+			orderBy: { year: 'asc' },
+		});
 	}
 }

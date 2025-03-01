@@ -1,36 +1,30 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMovieDto {
-  @ApiProperty({
-    type: 'string',
-  })
-  @IsNotEmpty()
-  @IsString()
-  title: string;
-  @ApiProperty({
-    type: 'integer',
-    format: 'int32',
-  })
-  @IsNotEmpty()
-  @IsInt()
-  year: number;
-  @ApiProperty({
-    type: 'string',
-  })
-  @IsNotEmpty()
-  @IsString()
-  studios: string;
-  @ApiProperty({
-    type: 'string',
-  })
-  @IsNotEmpty()
-  @IsString()
-  producers: string;
-  @ApiProperty({
-    type: 'boolean',
-  })
-  @IsNotEmpty()
-  @IsBoolean()
-  winner: boolean;
+	@ApiProperty({
+		type: 'string',
+	})
+	@IsNotEmpty()
+	@IsString()
+	title: string;
+	@ApiProperty({
+		type: 'integer',
+		format: 'int32',
+	})
+	@IsNotEmpty()
+	@IsInt()
+	year: number;
+	@ApiProperty({
+		type: 'string',
+	})
+	@IsNotEmpty()
+	@IsString()
+	studios: string;
+	@ApiProperty({
+		type: 'string',
+	})
+	@IsNotEmpty()
+	@IsString()
+	producers: string;
 }
