@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import { parse } from 'csv-parse/sync';
 
 const prisma = new PrismaClient();
@@ -13,11 +13,11 @@ interface MovieRecord {
 	winner?: string;
 }
 
-async function main() {
-	console.log('Starting seed...');
+function importCsvData() {
+	const fileName = 'movielist.csv';
+	const csvFilePath = path.resolve(__dirname, 'csv', fileName);
 
 	try {
-		const csvFilePath = path.join(__dirname, '../movielist.csv');
 		const csvContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
 
 		const records = parse(csvContent, {
@@ -27,6 +27,18 @@ async function main() {
 			trim: true,
 		}) as MovieRecord[];
 
+		return records;
+	} catch (error) {
+		console.error('Erro ao ler arquivo CSV:', error);
+		throw error;
+	}
+}
+
+async function main() {
+	console.log('Starting seed...');
+
+	try {
+		const records = importCsvData();
 		console.log(`Found ${records.length} records in CSV file`);
 
 		for (const record of records) {

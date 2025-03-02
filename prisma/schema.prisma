@@ -45,4 +45,5 @@ model Movie {
   winner    Boolean @default(false)
 
   @@unique([title, year])
+  @@index([winner])
 }

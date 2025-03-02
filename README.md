@@ -1,10 +1,20 @@
+## Requisitos
+
+- Node.js (version 22)
+- npm
+
 ## Project setup
 
 ```bash
 $ npm install
 
+$ npx prisma db push
+
 $ npx prisma generate
+
 $ npm run prisma:seed
+
+$ npm run build
 ```
 
 ## Compile and run the project
@@ -27,4 +37,4 @@ $ npm run start:prod
 $ npm run test:e2e
 ```
 
-Para alterar o csv que é importado no banco de dados é só alterar a linha 20 do arquivo "seed.ts", dentro da pasta prisma.
+Para alterar o csv que é importado no banco de dados é só alterar a linha 17 do arquivo "seed.ts", dentro da pasta prisma.

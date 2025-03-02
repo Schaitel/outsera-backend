@@ -6,7 +6,7 @@ import MovieRepository from '@movie/movie.repository';
 export default class MovieService {
 	constructor(private readonly movieRepository: MovieRepository) {}
 
-	async getProducerAwardIntervals(): Promise<AwardIntervalDto> {
+	async getWinnersProducers(): Promise<{ [key: string]: number[] }> {
 		const winners = await this.movieRepository.getWinnersMovies();
 
 		const producerWins: { [key: string]: number[] } = {};
@@ -25,6 +25,12 @@ export default class MovieService {
 			});
 		});
 
+		return producerWins;
+	}
+
+	getIntervalBetweenWins(producerWins: {
+		[key: string]: number[];
+	}): ProducerIntervalDto[] {
 		const intervals: ProducerIntervalDto[] = [];
 
 		Object.entries(producerWins).forEach(([producer, years]) => {
@@ -39,6 +45,13 @@ export default class MovieService {
 				}
 			}
 		});
+
+		return intervals;
+	}
+
+	async getProducerAwardIntervals(): Promise<AwardIntervalDto> {
+		const producerWins = await this.getWinnersProducers();
+		const intervals = this.getIntervalBetweenWins(producerWins);
 
 		const sortedIntervals = intervals.sort((a, b) => a.interval - b.interval);
 		const minInterval = sortedIntervals[0]?.interval || 0;
