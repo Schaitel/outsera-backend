@@ -10,19 +10,12 @@ $ npm install
 
 $ npx prisma db push
 
-$ npx prisma generate
-
-$ npm run prisma:seed
-
 $ npm run build
 ```
 
 ## Compile and run the project
 
 ```bash
-# development
-$ npm run start
-
 # watch mode
 $ npm run start:dev
 
@@ -37,4 +30,6 @@ $ npm run start:prod
 $ npm run test:e2e
 ```
 
-Para alterar o csv que é importado no banco de dados é só alterar a linha 17 do arquivo "seed.ts", dentro da pasta prisma.
+# Endpoint URL: http://localhost:3000/movies/awards/intervals
+
+Para alterar o csv que é importado no banco de dados é só alterar o arquivo dentro da pasta src/assets.

@@ -134,5 +134,34 @@ describe('MovieController (e2e)', () => {
 			);
 			expect(uniqueProducersMax.size).toBe(result.max.length);
 		});
+
+		it('should return the exact expected object from default file', async () => {
+			const expectedResponse = {
+				min: [
+					{
+						producer: 'Joel Silver',
+						interval: 1,
+						previousWin: 1990,
+						followingWin: 1991,
+					},
+				],
+				max: [
+					{
+						producer: 'Matthew Vaughn',
+						interval: 13,
+						previousWin: 2002,
+						followingWin: 2015,
+					},
+				],
+			};
+
+			const response = await request(app.getHttpServer())
+				.get('/movies/awards/intervals')
+				.expect(200);
+
+			const result = response.body as AwardIntervalDto;
+
+			expect(result).toEqual(expectedResponse);
+		});
 	});
 });

@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { json } from 'express';
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 	app.use(json());
 
@@ -14,7 +16,11 @@ async function bootstrap() {
 		optionsSuccessStatus: 204,
 	});
 
+	app.useStaticAssets(join(__dirname, '..', 'assets'));
+
 	await app.listen(process.env.PORT ?? 3000);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+	console.error('Error starting app', err);
+});

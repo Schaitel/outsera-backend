@@ -1,10 +1,68 @@
-import { Injectable } from '@nestjs/common';
-import { AwardIntervalDto, ProducerIntervalDto } from '@movie/dto';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import {
+	AwardIntervalDto,
+	IMovieRecord,
+	ProducerIntervalDto,
+} from '@movie/dto';
 import MovieRepository from '@movie/movie.repository';
+import * as fs from 'fs';
+import * as path from 'path';
+import { parse } from 'csv-parse/sync';
 
 @Injectable()
-export default class MovieService {
+export default class MovieService implements OnModuleInit {
 	constructor(private readonly movieRepository: MovieRepository) {}
+
+	importCsvData(): IMovieRecord[] {
+		const fileName = 'movielist.csv';
+		const csvFilePath = path.resolve(__dirname, '..', 'assets', fileName);
+
+		try {
+			const csvContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
+
+			const records: IMovieRecord[] = parse(csvContent, {
+				columns: true,
+				delimiter: ';',
+				skip_empty_lines: true,
+				trim: true,
+			}) as IMovieRecord[];
+
+			return records;
+		} catch (error) {
+			console.error('Erro ao ler arquivo CSV:', error);
+			throw error;
+		}
+	}
+
+	async loadMoviesFromCSV() {
+		try {
+			const records = this.importCsvData();
+
+			for (const record of records) {
+				const existingMovie = await this.movieRepository.getMovie(
+					record.title,
+					parseInt(record.year),
+				);
+
+				if (!existingMovie) {
+					await this.movieRepository.createMovie({
+						title: record.title,
+						year: parseInt(record.year),
+						studios: record.studios,
+						producers: record.producers,
+						winner: record?.winner === 'yes' ? true : false,
+					});
+				}
+			}
+		} catch (error) {
+			console.error('Error during seed:', error);
+			throw error;
+		}
+	}
+
+	async onModuleInit() {
+		await this.loadMoviesFromCSV();
+	}
 
 	async getWinnersProducers(): Promise<{ [key: string]: number[] }> {
 		const winners = await this.movieRepository.getWinnersMovies();

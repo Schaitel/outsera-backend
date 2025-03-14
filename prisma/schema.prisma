@@ -33,7 +33,7 @@ generator nestjsDto {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = "file:memory?mode=memory&cache=shared"
 }
 
 model Movie {
